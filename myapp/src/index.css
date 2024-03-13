@@ -18,7 +18,7 @@ float: left;}
   border-radius: 12px;
   border-color:black ;
 }
-#username{
+#ldapid{
   width: 100%;
   border-radius: 7px;
   height: 20px;
@@ -61,7 +61,7 @@ float: left;}
     width: 500px;
     height: 300px;
   }
-  form1{
+  .form1{
     width: 500px;
     height: 300px;
   }
@@ -156,7 +156,7 @@ nav{
   background-color:#023047;
   color: white;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
 }
 
@@ -166,8 +166,9 @@ nav{
 }
 
 .d21{
-  font-size: 26px;
-  margin-left: 26%;
+  font-size: 40px;
+  margin-left: 56%;
+  margin-top: -6%;
 }
 td{
   text-align: left;
@@ -210,7 +211,6 @@ body{
 }
 .g2{
   margin-left: 0%;
-  
 }
 .g3{
   margin-left: 4%;
@@ -298,4 +298,14 @@ footer{
   display: flex;
   flex-direction: column;
   align-items: left;
+}
+.b1 , .b2 ,.b3{
+  background-color: #023047;
+  width: 125px;
+  box-shadow: none;
+  border: none;
+}
+.navclass{
+  display: flex;
+  flex-direction: column;
 }
