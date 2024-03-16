@@ -1,6 +1,5 @@
 import * as React from "react";
 import HoverRating from "../Components/rating";
-import Footer from "../Components/footer";
 import logo from "../assets/Title.png"
 import Footer2 from "../Components/footer2";
 import { Link } from "react-router-dom";
@@ -8,6 +7,7 @@ import { Link } from "react-router-dom";
 
 
 function Coursepage(props) {
+
   return (
     <div className="flex flex-col items-center bg-white">
       <div className="flex justify-center items-center self-stretch px-16 py-5 w-full text-xl text-white whitespace-nowrap bg-sky-950 max-md:px-5 max-md:max-w-full">
@@ -26,17 +26,9 @@ function Coursepage(props) {
               </div>
             <div className="flex-auto self-stretch my-auto">Department</div>
             <div className="self-stretch my-auto">Statistics</div>
-            <img
-              loading="lazy"
-              srcSet="..."
-              className="shrink-0 self-stretch rounded-full aspect-square w-[35px]"
-            />
           </div>  
         </div>
       </div>
-
-
-      
       <div className="px-0.5 mt-24 w-full max-w-[1200px] max-md:mt-10 max-md:max-w-full">
         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
           <div className="flex flex-col w-[63%] max-md:ml-0 max-md:w-full">

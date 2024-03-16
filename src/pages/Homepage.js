@@ -4,7 +4,21 @@ import logo from "../assets/Title.png"
 import Footer from "../Components/footer";
 import SelectOptions from "../Components/dropdown2";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
 function Home(props) {
+  const [dept,setDept] = React.useState();
+  React.useEffect(() => {
+    const TokenData = () => {
+      const headers = {
+          "Content-Type": "application/json",
+      };
+      axios.get('http://127.0.0.1:8000/dept', { headers }).then(res=>res).then(data=>{setDept(data.data.departments);
+    console.log(data.data.departments)})
+  };
+  TokenData()
+  }, []);
+
   return (
     <div className="flex flex-col items-center bg-white">
       <div className="flex justify-center items-center self-stretch px-16 py-5 w-full text-xl text-white whitespace-nowrap bg-sky-950 max-md:px-5 max-md:max-w-full">
@@ -33,7 +47,10 @@ function Home(props) {
         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
           <div className="flex flex-col w-[42%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow text-base tracking-normal max-md:mt-10">
-              <SelectOptions/>
+
+              {dept && <SelectOptions dept={dept}/> }
+              
+
             </div>
           </div>
           <div className="flex flex-col ml-5 w-[58%] max-md:ml-0 max-md:w-full">

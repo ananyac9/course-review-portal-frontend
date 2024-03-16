@@ -11,7 +11,7 @@ root.render(
   <Routes>
     <Route path="/" >
       <Route index element={<Home />} />
-      <Route path="course/*" element={<Coursepage></Coursepage>} />
+      <Route path="course/:uid" element={<Coursepage></Coursepage>} />
     </Route>
   </Routes> 
 </BrowserRouter>

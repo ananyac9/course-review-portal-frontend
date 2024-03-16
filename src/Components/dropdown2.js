@@ -5,18 +5,36 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
-
-
-export default function SelectOptions() {
+export default function SelectOptions({ dept }) {
     const [course, setCourse] = React.useState("");
     const [openD, setOpenD] = React.useState(false);
     const [openC, setOpenC] = React.useState(false);
     const [department, setDepartment] = React.useState("");
+    const [courseItems, setCItems] = React.useState("");
+    console.log(dept)
+
+const callCourseList =()=>{
+    const TokenData = () => {
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        const url = "http://127.0.0.1:8000/dept/" + department;
+        axios.get(url, { headers }).then(res => res).then(data => {
+            setCItems(data.data.courses);
+            console.log(data)
+        })
+    };
+    TokenData()
+}
+
     let navigate = useNavigate();
     const handleDepartmentChange = (event) => {
+        event.preventDefault();
         setDepartment(event.target.value);
+
     };
 
     const handleCourseChange = (event) => {
@@ -24,30 +42,33 @@ export default function SelectOptions() {
     };
     const handleCloseDepartment = () => {
         setOpenD(false);
-        console.log(1)
     };
 
     const handleOpenDepartment = () => {
         setOpenD(true);
         setOpenC(false);
-        console.log(2)
+
     };
     const handleCloseCourse = () => {
         setOpenC(false);
-        console.log(3)
+
     };
 
     const handleOpenCourse = () => {
         setOpenC(true);
         setOpenD(false);
-        console.log(4)
+
     };
 
+    if (department) {
+        callCourseList();
+    }
 
     return (
+
         <div>
             <div>
-                <Button className="department" sx={{ display: "block", mt: 2 }} onClick={handleOpenDepartment}>
+                <Button className="department" sx={{ display: "block", mt: 2 }} onClick={handleDepartmentChange}>
                     Department
                 </Button>
                 <FormControl sx={{ m: 1, minWidth: 400 }}>
@@ -62,19 +83,18 @@ export default function SelectOptions() {
                         label="Department"
                         onChange={handleDepartmentChange}
                     >
-
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Computer Science Engineering</MenuItem>
-                        <MenuItem value={20}>Electrical Engineering</MenuItem>
-                        <MenuItem value={30}>Mechanical Engineering</MenuItem>
+                        {
+                            dept.map((dep, index) => {
+                                return <MenuItem value={dep.id} >{dep.name}</MenuItem>
+                            })
+                        }
 
                     </Select>
                 </FormControl>
             </div>
+
             <div>
-                <Button className="course" sx={{ display: "block", mt: 2 }} onClick={handleOpenCourse}>
+                <Button className="course" sx={{ display: "block", mt: 2 }} onChange={handleOpenCourse}>
                     course
                 </Button>
                 <FormControl sx={{ m: 1, minWidth: 400 }}>
@@ -89,23 +109,30 @@ export default function SelectOptions() {
                         label="Course"
                         onChange={handleCourseChange}
                     >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>CS101</MenuItem>
-                        <MenuItem value={20}>CS209</MenuItem>
-                        <MenuItem value={30}>DS111</MenuItem>
+
+
+                        {
+                            
+                            courseItems ? courseItems.map((c, index) => {
+                                return <MenuItem value={c.id}>{(c.code+"")}</MenuItem>
+                            }) : <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                        }
+
+
 
                     </Select>
                 </FormControl>
             </div>
+
             <div className="flex gap-5 justify-between mt-12 whitespace-nowrap max-md:mt-10">
                 <div className="grow justify-center px-14 py-3 text-black rounded-md border border-solid bg-neutral-200 border-zinc-500 max-md:px-5" onClick={() => { setCourse("None"); setDepartment("None") }}>
                     Clear
                 </div>
-                <div className="grow justify-center px-12 py-3.5 text-center text-white bg-cyan-600 rounded-lg max-md:px-5" onClick={()=>{
+                <div className="grow justify-center px-12 py-3.5 text-center text-white bg-cyan-600 rounded-lg max-md:px-5" onClick={() => {
                     console.log(course);
-                    navigate('/course/'+course)
+                    navigate('/course/' + course)
                 }}>
                     Submit
                 </div>
