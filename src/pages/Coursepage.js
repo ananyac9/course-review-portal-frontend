@@ -3,10 +3,26 @@ import HoverRating from "../Components/rating";
 import logo from "../assets/Title.png"
 import Footer2 from "../Components/footer2";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import StarIcon from '@mui/icons-material/Star';
+
+function Coursepage() {
+
+  const [code,setCode] = React.useState(0);
 
 
+  React.useEffect(()=>{
+    const url =  window.location.href;
+    const TokenData = () => {
+      const headers = {
+          "Content-Type": "application/json",
+      };
+      axios.get('http://127.0.0.1:8000/'+url.substring(22), { headers }).then(res=>{
+    console.log(res.data)})
+  };
+  TokenData();
+  },[])
 
-function Coursepage(props) {
 
   return (
     <div className="flex flex-col items-center bg-white">
@@ -39,11 +55,7 @@ function Coursepage(props) {
                   Algorithms
                 </div>
                 <div className="flex gap-2.5 justify-center mt-4 text-2xl tracking-normal leading-8 whitespace-nowrap">
-                  <img
-                    loading="lazy"
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/836c85c6867821b63d94a1e1d55eff86adc60a3b9592431478453be22de0080c?"
-                    className="shrink-0 max-w-full aspect-[5.26] w-[201px]"
-                  />
+                <StarIcon style={{ opacity:1,}} fontSize="inherit" />
                   <div className="flex-auto my-auto">(4.5)</div>
                 </div>
                 <div className="mt-4 text-base tracking-normal leading-8">

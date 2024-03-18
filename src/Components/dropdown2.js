@@ -132,7 +132,7 @@ const callCourseList =()=>{
                 </div>
                 <div className="grow justify-center px-12 py-3.5 text-center text-white bg-cyan-600 rounded-lg max-md:px-5" onClick={() => {
                     console.log(course);
-                    navigate('/course/' + course)
+                    navigate('/dept/'+department+'/course/' + course)
                 }}>
                     Submit
                 </div>

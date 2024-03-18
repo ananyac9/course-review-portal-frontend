@@ -7,16 +7,30 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 function Home(props) {
-  const [dept,setDept] = React.useState();
+  const [dept, setDept] = React.useState();
+  const [topCourses, setTopCourses] = React.useState([]);
   React.useEffect(() => {
     const TokenData = () => {
       const headers = {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       };
-      axios.get('http://127.0.0.1:8000/dept', { headers }).then(res=>res).then(data=>{setDept(data.data.departments);
-    console.log(data.data.departments)})
-  };
-  TokenData()
+      axios.get('http://127.0.0.1:8000/dept', { headers }).then(res => res).then(data => {
+        setDept(data.data.departments);
+        console.log(data.data.departments)
+      });
+    };
+
+    const TokenData2 = () => {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      axios.get('http://127.0.0.1:8000/dept/74/top_courses', { headers }).then(res => res).then(data => {
+        setTopCourses(data.data.top_courses);
+        console.log(data.data.top_courses)
+      });
+    };
+    TokenData();
+    TokenData2();
   }, []);
 
   return (
@@ -34,7 +48,7 @@ function Home(props) {
               <Link to="../">
                 <div>Home</div>
               </Link>
-              </div>
+            </div>
             <div className="flex-auto self-stretch my-auto">Department</div>
             <div className="self-stretch my-auto">Statistics</div>
           </div>
@@ -48,8 +62,8 @@ function Home(props) {
           <div className="flex flex-col w-[42%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow text-base tracking-normal max-md:mt-10">
 
-              {dept && <SelectOptions dept={dept}/> }
-              
+              {dept && <SelectOptions dept={dept} />}
+
 
             </div>
           </div>
@@ -98,19 +112,20 @@ function Home(props) {
             </tr>
           </thead>
         </table>
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
-        <CourseList Num="1" Name="Data Structure and Algorithm" Dept="CS" Credit="6" Rating="4.5" Prof="Animesh" Type="Theory" />
+
+
+        {
+
+          topCourses ? topCourses.map((c, index) => {
+            return <CourseList Num={index + 1} Name={c.code} Dept={c.department} Credit="6" Rating={c.average_rating} Prof="Animesh" Type="Theory" />
+          }) : ""
+
+
+        }
       </div>
-        <Footer class="max-w-[1920px]" ></Footer>
+      <Footer class="max-w-[1920px]" ></Footer>
     </div>
-    
+
   );
 }
 
