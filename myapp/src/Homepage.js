@@ -1,4 +1,4 @@
-import Navbar from "./Components/component/Navbar";
+import Navbar from "./Components/component/Nav";
 import StarRating from "./Components/component/StarRating";
 import BottomCard from "./Components/component/BottomCard";
 import Review from "./Components/component/Review";

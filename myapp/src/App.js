@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './Homepage';
 import Home from './Home';
+import Department from './Department';
 /*
 import Home from './Home';
 import Page1 from './Page1';
@@ -24,6 +25,7 @@ function App() {
 
         <Route path="/homepage" element={<Homepage/>} />
         <Route path="/home" element={<Home/>} />
+        <Route path="/department" element={<Department />} />
 
       </Routes>
     </BrowserRouter>
