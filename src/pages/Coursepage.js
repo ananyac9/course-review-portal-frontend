@@ -4,31 +4,80 @@ import logo from "../assets/Title.png"
 import Footer2 from "../Components/footer2";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import StarIcon from '@mui/icons-material/Star';
+import Rating from '@mui/material/Rating';
 
 function Coursepage() {
 
-  const [code,setCode] = React.useState(0);
+  const [code, setCode] = React.useState(0);
+  const [dept, setDept] = React.useState([]);
+  const [deptCode, setDeptCode] = React.useState(0);
+  const [deptName, setDeptName] = React.useState("AE");
+  const [deptInfo, setDeptInfo] = React.useState("AE");
+  const [avgRating, setAvgRating] = React.useState(0);
+  const [courseName, setCourseName] = React.useState("");
+  const [topCourses, setTopCourses] = React.useState([]);
+  const [myRating,setMyRating]=React.useState(0);
+
+  const setR = (value)=>{setMyRating(value);
+  console.log(value)};
+
+  const onSubmit = ()=>{
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const url = window.location.href;
+    axios.put('http://127.0.0.1:8000/' + url.substring(22), { headers }).then(res => res).then(data => {
+      console.log(data)
+    })
+  }
 
 
-  React.useEffect(()=>{
-    const url =  window.location.href;
+  React.useEffect(() => {
+    const url = window.location.href;
+    console.log(dept)
+
     const TokenData = () => {
       const headers = {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       };
-      axios.get('http://127.0.0.1:8000/'+url.substring(22), { headers }).then(res=>{
-    console.log(res.data)})
-  };
-  TokenData();
-  },[])
+
+      axios.get('http://127.0.0.1:8000/dept', { headers }).then(res => res).then(data => {
+        setDept(data.data.departments);
+        console.log(data.data.departments);
+        axios.get('http://127.0.0.1:8000/' + url.substring(22), { headers }).then(res => {
+          console.log(res.data);
+          let d = res.data;
+          setCode(d.code);
+          setDeptCode(d.department);
+          setAvgRating(d.average_rating);
+          setCourseName(d.name);
+          setDeptInfo(d.info);
+
+
+          [...dept].forEach((element) => {
+            if (element.id == deptCode)
+              setDeptName(element.name);
+          });
+
+          axios.get('http://127.0.0.1:8000/' + url.substring(22, 31)+'top_courses', { headers }).then(res => {
+            setTopCourses([res.data.top_courses[1], res.data.top_courses[2], res.data.top_courses[3]])
+          })
+
+        }
+        );
+      });
+    };
+
+
+    TokenData();
+  }, [])
 
 
   return (
     <div className="flex flex-col items-center bg-white">
       <div className="flex justify-center items-center self-stretch px-16 py-5 w-full text-xl text-white whitespace-nowrap bg-sky-950 max-md:px-5 max-md:max-w-full">
         <div className="flex gap-5 justify-between w-full max-w-[1200px] max-md:flex-wrap max-md:max-w-full">
-        <Link to="../"><img
+          <Link to="../"><img
             loading="lazy"
             src={logo}
             className="my-auto  w-[500px] max-md:max-w-full"
@@ -38,11 +87,11 @@ function Coursepage() {
             <div className="self-stretch my-auto">
               <Link to="../">
                 <div>Home</div>
-                </Link>
-              </div>
+              </Link>
+            </div>
             <div className="flex-auto self-stretch my-auto">Department</div>
             <div className="self-stretch my-auto">Statistics</div>
-          </div>  
+          </div>
         </div>
       </div>
       <div className="px-0.5 mt-24 w-full max-w-[1200px] max-md:mt-10 max-md:max-w-full">
@@ -51,34 +100,25 @@ function Coursepage() {
             <div className="flex flex-col grow justify-center text-white max-md:mt-10 max-md:max-w-full">
               <div className="flex flex-col items-start px-16 py-6 bg-sky-950 max-md:px-5 max-md:max-w-full">
                 <div className="text-4xl font-bold leading-[50px]">
-                  Data Structures and <br />
-                  Algorithms
+                  {courseName}
                 </div>
                 <div className="flex gap-2.5 justify-center mt-4 text-2xl tracking-normal leading-8 whitespace-nowrap">
-                <StarIcon style={{ opacity:1,}} fontSize="inherit" />
-                  <div className="flex-auto my-auto">(4.5)</div>
+
+                <Rating name="read-only" value={avgRating} readOnly />
+
+
+                  <div className="flex-auto my-auto">{avgRating}</div>
                 </div>
                 <div className="mt-4 text-base tracking-normal leading-8">
-                  <span className="font-bold text-white">Rank: </span>
-                  <span className="text-white">1</span>
-                  <br />
-                  <span className="font-bold text-white">Course code:</span> CSE
-                  304
+                  <span className="font-bold text-white">Course code:</span> {deptName + " "}
+                  {code}
                   <br />
                   <span className="font-bold text-white">Department:</span>{" "}
-                  Computer science and engineering
+                  {deptName}
                   <br />
-                  <span className="font-bold text-white">Type:</span> Theory
+                  <span className="font-bold text-white">Info:</span>{" "}
+                  {deptInfo}
                   <br />
-                  <span className="font-bold text-white">Credit:</span> 6<br />
-                  <span className="font-bold text-white">Offered in:</span>{" "}
-                  Spring
-                  <br />
-                  <span className="font-bold text-white">Instructor:</span>{" "}
-                  Prof. James
-                  <br />
-                  <span className="font-bold text-white">Slot: </span>
-                  <span className="text-white">5</span>
                 </div>
               </div>
             </div>
@@ -108,111 +148,46 @@ function Coursepage() {
       <div className="mt-28 mb-10 text-4xl font-bold text-black max-md:mt-10 max-md:max-w-full">
         Your rating
       </div>
-      
+
       <div class="scale-150 mt-0.5">
-      <HoverRating></HoverRating>
+        <HoverRating setR={setR}></HoverRating>
       </div>
 
-
-
-
-      <div className="mt-28 text-4xl font-bold text-black max-md:mt-10 max-md:max-w-full">
-        Your review
-      </div>
-      <div className="items-start pt-5 pr-16 pb-52 pl-6 mt-20 max-w-full text-base tracking-normal text-center whitespace-nowrap bg-white rounded-xl border border-solid shadow-sm border-sky-950 text-zinc-500 w-[584px] max-md:px-5 max-md:pb-10 max-md:mt-10">
-        Write your review here
-      </div>
       <div className="flex gap-5 justify-between mt-8 max-w-full text-base tracking-normal whitespace-nowrap w-[375px]">
-        <div className="flex-1 justify-center px-14 py-2.5 text-black rounded-md border border-solid bg-neutral-200 border-zinc-500 max-md:px-5">
-          Clear
-        </div>
-        <div className="flex-1 justify-center px-12 py-3 text-center text-white bg-cyan-600 rounded-lg max-md:px-5">
+    
+        <div className="flex-1 justify-center px-12 py-3 text-center text-white bg-cyan-600 rounded-lg max-md:px-5" onClick={onSubmit}>
           Submit
         </div>
       </div>
       <div className="mt-28 text-4xl font-bold text-black max-md:mt-10 max-md:max-w-full">
         Other Courses
       </div>
+
+
       <div className="flex gap-5 justify-between px-5 mt-20 w-full text-white max-w-[1200px] max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
-        <img
-          loading="lazy"
-          src="/../Components/vector1.png"
-          className="shrink-0 my-auto w-2.5 border-2 border-solid aspect-[0.31] border-sky-950 stroke-[2px] stroke-sky-950"
-        />
-        <div className="flex flex-col flex-1 justify-center">
-          <div className="flex flex-col pb-12 pl-7 bg-sky-950 max-md:pl-5">
-            <div className="overflow-hidden relative z-10 flex-col self-end pt-px pr-6 pb-20 pl-16 text-5xl whitespace-nowrap aspect-square text-sky-950 max-md:pr-5 max-md:pl-6 max-md:text-4xl">
-              <img
-                loading="lazy"
-                srcSet="..."
-                className="object-cover absolute inset-0 size-full"
-              />
-              3
+
+
+        {
+          topCourses ? topCourses.map((c, index) => {
+            return <div className="flex flex-col flex-1 justify-center">
+              <div className="flex flex-col pb-12 pl-7 bg-sky-950 max-md:pl-5">
+                <div className="mt-0 text-3xl font-bold">
+                  Robotics and Simulation
+                </div>
+                <div className="mt-5 text-base leading-6">
+                  Rating: {c.average_rating}
+                  <br />
+                  Credit: 6<br />
+                  Course Code: {deptName + " " + c.code}
+                  <br />
+                  Slot: 3
+                </div>
+              </div>
             </div>
-            <div className="mt-0 text-3xl font-bold">
-              Robotics and Simulation
-            </div>
-            <div className="mt-5 text-base leading-6">
-              Rating: 4.2
-              <br />
-              Credit: 6<br />
-              Instructor: Prof. Professor’s name
-              <br />
-              Slot: 3
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col flex-1 justify-center">
-          <div className="flex flex-col pb-12 pl-7 bg-sky-950 max-md:pl-5">
-            <div className="overflow-hidden relative z-10 flex-col self-end pt-px pr-6 pb-20 pl-16 text-5xl whitespace-nowrap aspect-square text-sky-950 max-md:pr-5 max-md:pl-6 max-md:text-4xl">
-              <img
-                loading="lazy"
-                srcSet="..."
-                className="object-cover absolute inset-0 size-full"
-              />
-              3
-            </div>
-            <div className="mt-0 text-3xl font-bold">
-              Robotics and Simulation
-            </div>
-            <div className="mt-5 text-base leading-6">
-              Rating: 4.2
-              <br />
-              Credit: 6<br />
-              Instructor: Prof. Professor's name
-              <br />
-              Slot: 3
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col flex-1 justify-center">
-          <div className="flex flex-col pb-12 pl-7 bg-sky-950 max-md:pl-5">
-            <div className="overflow-hidden relative z-10 flex-col self-end pt-px pr-6 pb-20 pl-16 text-5xl whitespace-nowrap aspect-square text-sky-950 max-md:pr-5 max-md:pl-6 max-md:text-4xl">
-              <img
-                loading="lazy"
-                srcSet="..."
-                className="object-cover absolute inset-0 size-full"
-              />
-              3
-            </div>
-            <div className="mt-0 text-3xl font-bold">
-              Robotics and Simulation
-            </div>
-            <div className="mt-5 text-base leading-6">
-              Rating: 4.2
-              <br />
-              Credit: 6<br />
-              Instructor: Prof. Professor’s name
-              <br />
-              Slot: 3
-            </div>
-          </div>
-        </div>
-        <img
-          loading="lazy"
-          src="../Components/vector.png"
-          className="shrink-0 my-auto w-2.5 border-2 border-solid aspect-[0.31] border-sky-950 stroke-[2px] stroke-sky-950"
-        />
+          }) : ""
+        }
+
+
       </div>
       <Footer2></Footer2>
     </div>

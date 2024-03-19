@@ -6,6 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 
 
 const labels = {
+    0:'Yuckkk',
     0.5: 'Useless',
     1: 'Useless+',
     1.5: 'Poor',
@@ -22,8 +23,8 @@ function getLabelText(value) {
     return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
 }
 
-export default function HoverRating() {
-    const [value, setValue] = React.useState(2);
+export default function HoverRating({setR}) {
+    const [value, setValue] = React.useState(0);
     const [hover, setHover] = React.useState(-1);
 
     return (
@@ -42,6 +43,7 @@ export default function HoverRating() {
             getLabelText={getLabelText}
             onChange={(event, newValue) => {
                 setValue(newValue);
+                setR(newValue);
             }}
             onChangeActive={(event, newHover) => {
                 setHover(newHover);

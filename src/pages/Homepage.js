@@ -24,7 +24,7 @@ function Home(props) {
       const headers = {
         "Content-Type": "application/json",
       };
-      axios.get('http://127.0.0.1:8000/dept/74/top_courses', { headers }).then(res => res).then(data => {
+      axios.get('http://127.0.0.1:8000/dept/158/top_courses', { headers }).then(res => res).then(data => {
         setTopCourses(data.data.top_courses);
         console.log(data.data.top_courses)
       });
@@ -115,13 +115,11 @@ function Home(props) {
 
 
         {
-
           topCourses ? topCourses.map((c, index) => {
             return <CourseList Num={index + 1} Name={c.code} Dept={c.department} Credit="6" Rating={c.average_rating} Prof="Animesh" Type="Theory" />
           }) : ""
-
-
         }
+        
       </div>
       <Footer class="max-w-[1920px]" ></Footer>
     </div>
