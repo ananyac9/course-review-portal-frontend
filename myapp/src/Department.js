@@ -5,7 +5,6 @@ import DeptCard from "./Components/DeptCard"
 
 import Navbar from "./Components/component/Nav"
 
-
 export default function Department(){
   return(
     <div>

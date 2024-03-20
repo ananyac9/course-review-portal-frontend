@@ -1,8 +1,40 @@
-import React from "react"
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import topimg from "./top10.png"
 import { Table } from "@mui/material"
 
-export default function DeptDetail(){
+export default function DeptDetail() {
+    const [departmentCourses, setDepartmentCourses] = useState({});
+  
+    useEffect(() => {
+      fetchDepartmentCourses();
+    }, []);
+  
+    const fetchDepartmentCourses = async () => {
+      try {
+        const departments = [ "AE", "ChE", "CE", "CSE", "EE", "Math", "ME", "Physics"];
+  
+        const requests = departments.map(department =>
+          axios.get(`dept/:dept_id/top_courses`)
+        );
+  
+        const responses = await Promise.all(requests);
+  
+        const courses = responses.reduce((acc, response, index) => {
+          const department = departments[index];
+          acc[department] = response.data;
+          return acc;
+        }, {});
+  
+        setDepartmentCourses(courses);
+      } catch (error) {
+        console.error('Error fetching department courses:', error);
+      }
+    };
+  
+  
+
+
     return(
         <div className="department-detail">
             
@@ -10,94 +42,32 @@ export default function DeptDetail(){
                 <img src={topimg} className="topimg" />
                 
                     <Table className="table">
+                        <thead>
                         <tr className="heading-table"> 
                             <th>Rank</th>
                             <th>Course</th>
-                            <th>Type</th>
-                            <th>Credits</th>
-                            <th>Instructor</th>
-                            <th>Rating</th>
+                            
+                            
+                            <th>Dept. Average Rating</th>
                         </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>DSA</td>
-                            <td>Theory</td>
-                            <td>6</td>
-                            <td>Professor Name</td>
-                            <td>4.5</td>
-                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                            {Object.keys(departmentCourses).map(department => (
+                              <div key={department}>
+                                  {departmentCourses[department].map(course => (
+                                    <tr key={course.id}>
+                                      <td>{course.name}</td>
+                                      <td>{course.average_rating}</td>
+                                    
+                                    </tr>
+                                  ))}
+                              </div>
+                            ))}
+                        
+                        
+                        </tbody>
+                        
                     </Table>
                     
                 

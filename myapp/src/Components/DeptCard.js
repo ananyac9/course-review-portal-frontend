@@ -160,7 +160,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 const DeptCard = () => {
   // Sample image data
   const imageData = [
-    { id: 1, src: card1, data: DeptDetail  },
+    { id: 1, src: card1, data: {}  },
     { id: 2, src: card, data: DeptDetail  },
     { id: 3, src: card3, data: DeptDetail  },
     { id: 4, src: card4, data: DeptDetail  },
